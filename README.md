@@ -28,3 +28,7 @@ npx serve .
 1. 建立 repo（建議命名 `Shadow0607.github.io`，網址即為 `https://shadow0607.github.io/`）
 2. 推送本資料夾內容到 `main` 分支
 3. Repo → Settings → Pages → Source 選 `Deploy from a branch`，分支 `main`、資料夾 `/ (root)`
+
+## 更新 CSS / JS 時
+
+各頁引用 `assets/` 檔案時帶有版本號（例如 `main.js?v=20261110`）。修改 `assets/` 裡的檔案後，把所有 `.html` 裡的版本號改成新的日期，瀏覽器才會抓新檔案，不會沿用快取。
