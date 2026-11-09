@@ -6,7 +6,7 @@ window.SITE = {
   displayName: "Wayne W.",
   // Google 表單公開網址（https://forms.gle/... 或 https://docs.google.com/forms/...）
   // 留空時，導覽列與「關於我」的聯絡按鈕都不會顯示
-  contactFormUrl: "",
+  contactFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdltdWO41opMc8UPq1CUzIaqfv7hUrBd7-5pmCh2DqC0YqPGg/viewform",
 };
 
 window.PROJECTS = [
