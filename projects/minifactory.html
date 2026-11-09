@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniFactory · Wayne W.</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body data-page="projects" data-base="../">
+  <header class="site-header" data-header></header>
+
+  <main class="container article">
+    <section>
+      <p><a href="../projects.html">← 所有專案</a></p>
+      <h1>MiniFactory</h1>
+      <p>純軟體智慧工廠任務調度與異常監控平台</p>
+      <div class="tags">
+        <span class="badge">規劃中</span>
+        <span class="tag">ASP.NET Core</span><span class="tag">Vue 3</span><span class="tag">PostgreSQL</span>
+        <span class="tag">RabbitMQ</span><span class="tag">Redis</span><span class="tag">SignalR</span><span class="tag">OpenTelemetry</span>
+      </div>
+      <p style="margin-top:1rem"><a class="btn" href="https://github.com/Shadow0607/MiniFactory" target="_blank" rel="noopener">GitHub Repo ↗</a></p>
+
+      <p class="callout">專案狀態：規劃中。以下為預計實作的規格，功能尚未宣稱完成；這是軟體模擬與工程展示專案，不連接真實工廠設備，也不是完整 MES。</p>
+
+      <h2>專案目標</h2>
+      <p>用虛擬產線與設備模擬製造現場，在沒有 PLC、機台或攝影機的條件下，實作生產訂單、工序派工、設備回報、故障恢復與系統監控，並處理真實的工程問題：</p>
+      <ul>
+        <li>API 逾時後重送與重複訊息</li>
+        <li>兩個 Worker 搶同一台設備</li>
+        <li>資料庫寫入成功但訊息發送失敗（Outbox）</li>
+      </ul>
+
+      <h2>使用情境</h2>
+      <p>建立訂單 <code>ORD-20260921-001</code>（產品 <code>Motor-A</code>、數量 500、<code>Line-01</code>），依序執行三道工序：</p>
+      <div class="flow">
+        <span>加工 · Machine-A</span><i>→</i><span>組裝 · Machine-B</span><i>→</i><span>檢驗 · Machine-C</span>
+      </div>
+      <p>Simulator 可控制設備正常完成、延遲、回傳錯誤、暫時離線及恢復上線。</p>
+
+      <h2>第一版範圍</h2>
+      <ul>
+        <li>建立訂單，依固定工序產生 Job，依順序派工</li>
+        <li>3 台以上虛擬設備，回報 <code>Idle</code>、<code>Running</code>、<code>Error</code>、<code>Offline</code></li>
+        <li>保存訂單、Job、執行紀錄、設備狀態歷史、事件及告警</li>
+        <li>RabbitMQ 傳遞派工事件，搭配 Outbox 避免漏送</li>
+        <li>重送派工命令沿用同一識別碼，防止重複執行</li>
+        <li>Vue Dashboard 以 SignalR 推播即時更新，輪詢作為斷線 fallback</li>
+        <li>Docker Compose 一鍵啟動全部服務</li>
+        <li>結構化日誌、關聯 ID 與基本 Trace</li>
+      </ul>
+
+      <h2>架構元件</h2>
+      <table>
+        <tr><th>元件</th><th>職責</th></tr>
+        <tr><td>Vue 3 + TypeScript</td><td>訂單、設備、告警與執行歷史的操作及展示</td></tr>
+        <tr><td>ASP.NET Core Web API</td><td>驗證輸入、建立訂單、接收設備回報、查詢 API、SignalR 推播</td></tr>
+        <tr><td>ASP.NET Core Worker</td><td>消費派工訊息、狀態轉移與逾時檢查、Redis 去重前置檢查</td></tr>
+        <tr><td>PostgreSQL + EF Core</td><td>持久資料、唯一約束、交易及 Outbox／Inbox 紀錄</td></tr>
+        <tr><td>RabbitMQ</td><td>傳送派工及狀態事件，消費者需容忍重複投遞</td></tr>
+        <tr><td>Redis</td><td>去重快取與設備狀態快取（最終保證仍為 DB 唯一約束）</td></tr>
+        <tr><td>Equipment Simulator</td><td>模擬設備回應、故障與命令去重</td></tr>
+        <tr><td>OpenTelemetry</td><td>串接 API、Worker、Simulator 的 Trace</td></tr>
+      </table>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-footer></footer>
+
+  <script src="../assets/data.js"></script>
+  <script src="../assets/main.js"></script>
+</body>
+</html>

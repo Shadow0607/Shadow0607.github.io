@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IG AI Vision System · Wayne W.</title>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body data-page="projects" data-base="../">
+  <header class="site-header" data-header></header>
+
+  <main class="container article">
+    <section>
+      <p><a href="../projects.html">← 所有專案</a></p>
+      <h1>IG AI Vision System</h1>
+      <p>分散式微服務架構的社群媒體爬蟲與 AI 視覺辨識系統</p>
+      <div class="tags">
+        <span class="tag">ASP.NET Core</span><span class="tag">Python</span><span class="tag">Vue 3</span>
+        <span class="tag">MySQL</span><span class="tag">Redis</span><span class="tag">MinIO</span><span class="tag">Qdrant</span>
+      </div>
+      <p style="margin-top:1rem"><a class="btn" href="https://github.com/Shadow0607/ig_ai_vision_system" target="_blank" rel="noopener">GitHub Repo ↗</a></p>
+
+      <h2>概述</h2>
+      <p>自動化採集 Instagram / YouTube 等社群平台的媒體資源，透過深度學習模型進行人臉辨識與歸檔。系統分為五個區塊：基礎設施、Python 爬蟲端（Producer）、Python AI 分析端（Consumer）、.NET 後端 API 與 Vue 3 前端。</p>
+
+      <h2>處理流程</h2>
+      <div class="flow">
+        <span>S1 爬蟲下載</span><i>→</i><span>pHash + MD5 去重</span><i>→</i><span>上傳 MinIO</span><i>→</i>
+        <span>Redis Queue</span><i>→</i><span>S2 人臉特徵擷取</span><i>→</i><span>Qdrant 向量比對</span><i>→</i>
+        <span>OUTPUT / PENDING / REJECTED</span>
+      </div>
+
+      <h2>系統組成</h2>
+      <table>
+        <tr><th>區塊</th><th>技術</th><th>職責</th></tr>
+        <tr><td>基礎設施</td><td>Docker Compose：MySQL 8、Redis 7、MinIO、Qdrant、Geth</td><td>資料儲存、訊息佇列、物件儲存、向量資料庫、私有鏈上鏈備查</td></tr>
+        <tr><td>S1 爬蟲服務</td><td>Python</td><td>依監控清單下載貼文與限時動態、雙指紋去重、發佈處理任務；來源不明確者移入隔離區</td></tr>
+        <tr><td>S2 AI 辨識服務</td><td>Python、RetinaFace / MTCNN</td><td>多執行緒消費任務、擷取人臉特徵、比對分數後自動分類並更新狀態</td></tr>
+        <tr><td>後端 API</td><td>ASP.NET Core、EF Core、SignalR、JWT</td><td>RSA JWT 認證的 REST API、媒體服務、即時推播 Worker 進度、背景佇列監控</td></tr>
+        <tr><td>前端</td><td>Vue 3 + Vite、Axios、SignalR</td><td>監控儀表板、進度與報表、人工審查介面</td></tr>
+      </table>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-footer></footer>
+
+  <script src="../assets/data.js"></script>
+  <script src="../assets/main.js"></script>
+</body>
+</html>

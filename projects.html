@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>所有專案 · Wayne W.</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body data-page="projects">
+  <header class="site-header" data-header></header>
+
+  <main class="container">
+    <section>
+      <h2>所有專案</h2>
+      <p class="lead">清單會自動從 GitHub 取得最新的公開 repo；連線失敗時顯示內建資料。</p>
+
+      <div class="toolbar" id="toolbar">
+        <label><input type="checkbox" id="showForks" /> 顯示 Fork</label>
+      </div>
+      <div class="grid" id="list"><p class="source-note">載入中…</p></div>
+      <p class="source-note" id="source"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-footer></footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/main.js"></script>
+  <script>
+    (async () => {
+      const { list, source } = await Site.loadProjects();
+      // 排除作品集網站本身
+      const all = list.filter((p) => !/\.github\.io$/i.test(p.name) && p.name !== "portfolio");
+      const listEl = document.getElementById("list");
+      const toolbar = document.getElementById("toolbar");
+      const showForks = document.getElementById("showForks");
+      let lang = "全部";
+
+      const langs = ["全部", ...new Set(all.map((p) => p.language).filter(Boolean))];
+      langs.reverse().forEach((l) => {
+        const b = document.createElement("button");
+        b.textContent = l;
+        b.dataset.lang = l;
+        if (l === lang) b.classList.add("active");
+        b.onclick = () => {
+          lang = l;
+          toolbar.querySelectorAll("button").forEach((x) => x.classList.toggle("active", x === b));
+          render();
+        };
+        toolbar.prepend(b);
+      });
+
+      function render() {
+        const items = all
+          .filter((p) => showForks.checked || !p.fork)
+          .filter((p) => lang === "全部" || p.language === lang);
+        listEl.innerHTML = items.length ? items.map(Site.card).join("") : `<p class="source-note">沒有符合的專案。</p>`;
+      }
+      showForks.onchange = render;
+      render();
+
+      document.getElementById("source").textContent =
+        source === "live" ? "資料來源：GitHub API（即時）" : "資料來源：內建清單（GitHub API 暫時無法連線）";
+    })();
+  </script>
+</body>
+</html>

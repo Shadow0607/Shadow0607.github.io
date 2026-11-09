@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Wayne W. · 作品集</title>
+  <meta name="description" content="Wayne W. 的公開專案作品集：ASP.NET Core、Vue 3、Python 與資安相關專案。" />
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body data-page="home">
+  <header class="site-header" data-header></header>
+
+  <main class="container">
+    <section class="hero">
+      <h1>製造業系統整合 × 資安<br />的實作作品集</h1>
+      <p>近 5 年軟體開發經驗，主要在製造業開發與導入 MES 系統；資訊安全碩士。這裡整理我在 GitHub 上的公開專案，以 C# / ASP.NET Core、Vue 3、Python Worker 與分散式系統設計為主。</p>
+      <div class="actions">
+        <a class="btn primary" href="projects.html">看所有專案</a>
+        <a class="btn" href="about.html">工作經歷</a>
+        <a class="btn" href="https://github.com/Shadow0607" target="_blank" rel="noopener">GitHub 個人頁 ↗</a>
+      </div>
+    </section>
+
+    <section>
+      <h2>精選專案</h2>
+      <div class="grid" id="featured"></div>
+    </section>
+
+    <section>
+      <h2>技術領域</h2>
+      <div class="skills">
+        <div class="card"><h3>製造業系統</h3><p>MES / MCS / WMS 開發與新廠導入、條碼與客戶 API 串接</p></div>
+        <div class="card"><h3>後端</h3><p>C#、ASP.NET Core Web API、Web Service、SignalR</p></div>
+        <div class="card"><h3>前端</h3><p>Vue 3、Angular、Nuxt 3</p></div>
+        <div class="card"><h3>資料庫與基礎設施</h3><p>SQL Server、Oracle、MySQL、Redis、Docker、ELK</p></div>
+        <div class="card"><h3>資安</h3><p>資訊安全碩士、CompTIA Security+、iPAS 資安初級、NSPA</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" data-footer></footer>
+
+  <script src="assets/data.js"></script>
+  <script src="assets/main.js"></script>
+  <script>
+    document.getElementById("featured").innerHTML =
+      window.PROJECTS.filter((p) => p.featured).map(Site.card).join("");
+  </script>
+</body>
+</html>
